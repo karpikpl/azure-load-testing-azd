@@ -1,0 +1,18 @@
+version: v0.1
+testId: aca-load-test
+displayName: Contain App Load Test
+description: Load test Container App with many users
+testPlan: test.jmx
+testType: JMX
+engineInstances: 2
+configurationFiles:
+  - 'random_users.csv'
+splitAllCSVs: True
+failureCriteria:
+  - avg(response_time_ms) > 300
+  - percentage(error) > 50
+autoStop:
+  errorPercentage: 80
+  timeWindow: 60
+properties:
+  userPropertyFile: 'azd.properties'

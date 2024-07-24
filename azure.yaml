@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: api-with-load-test
+metadata:
+    template: azd-init@1.9.5
+services:
+    api:
+        project: src/api
+        host: containerapp
+        language: js
+hooks:
+  postdeploy:
+      shell: sh
+      run: |
+        # Generate JMeter properties file
+        cd  src/jmeter
+        echo "url=${AZURE_API_HOST}" > azd.properties
+        echo "port=443" >> azd.properties
+        echo "http=https" >> azd.properties
+
+        az extension add --upgrade --yes --name load
+        
+        az load test create \
+            --load-test-resource ${AZURE_LOAD_TEST_NAME} \
+            --resource-group ${AZURE_RG} \
+            --test-id aca-load-test \
+            --load-test-config-file jmeter.yml \
+            --split-csv true
+
+        az load test-run create \
+            --load-test-resource ${AZURE_LOAD_TEST_NAME} \
+            --resource-group ${AZURE_RG} \
+            --test-id aca-load-test \
+            --test-run-id aca-first-run \
+            --display-name "AZD first run on ACA" \
+            --description "Test run from AZD" \
+            --no-wait
+        
+        rm azd.properties
+

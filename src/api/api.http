@@ -1,0 +1,23 @@
+### Generate Token
+POST http://localhost:3000/token
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "pass"
+}
+
+### Create Book
+POST http://localhost:3000/books
+Content-Type: application/json
+Authorization: Bearer dummy_token_user
+
+{
+  "title": "Example Book Title",
+  "author": "Author Name",
+  "year": 2021
+}
+
+### Get Books
+GET http://localhost:3000/books
+Authorization: Bearer dummy_token_user

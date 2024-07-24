@@ -33,3 +33,7 @@ Thanks to Azure Load Testing features, initial CSV file is split between all the
 Container App scales with http scaler to 10 instances during the load test.
 
 ![ACA Scaling](/assets/aca.png)
+
+## Samples
+
+* [Azure Load Testing Samples](https://github.com/Azure-Samples/azure-load-testing-samples)
